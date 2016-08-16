@@ -1,0 +1,7 @@
+# Composer
+composer.phar
+vendor/**/*
+composer.lock
+
+# Conifg file
+app/config.php
