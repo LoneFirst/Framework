@@ -8,6 +8,7 @@ class config
     {
         require ROOT_PATH.'app/configs.php';
     }
+    
     public function result($keyPath)
     {
         $var = explode(':', $keyPath);

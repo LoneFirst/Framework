@@ -26,6 +26,7 @@ class view
         return file_exists($file);
     }
 
+    // 类laravel模板引擎
     private static function handleView()
     {
 

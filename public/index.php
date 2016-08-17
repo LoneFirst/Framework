@@ -4,8 +4,6 @@ define('APP_PATH', ROOT_PATH.'app/');
 define('FILE_PATH','//'.substr($_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'],0,-9));// call this from outside
 
 require __DIR__.'/../vendor/autoload.php';
-
-// 将变量全局化
 $config = new core\config;
 
 // 返回对应的设置内容
@@ -17,6 +15,11 @@ function config($keyPath)
     global $config;
     $result = $config->result($keyPath);
     return $result;
+}
+
+function hi()
+{
+    echo 'hi';
 }
 new core\route;
 
