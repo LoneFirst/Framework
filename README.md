@@ -1,4 +1,7 @@
 LoneFirstFramework
 ======
 
-Developing...
+###Constituent Part
+ - router
+ - global view function
+ - global config loader

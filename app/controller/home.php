@@ -3,8 +3,8 @@ namespace controller;
 
 class home
 {
-    public function index($var)
+    public function index()
     {
-        echo $var;
+        view('home');
     }
 }

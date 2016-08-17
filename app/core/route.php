@@ -3,21 +3,25 @@ namespace core;
 
 class route
 {
+    // 在请求周期开始实例一个route,与此同时根据路由表对路由进行解析
     protected $uri;
     protected $handledURI;
     protected $handledFormat;
     protected $c;
     protected $method;
 
+    // 在这里进行流程的总览
     public function __construct()
     {
         $this->uri = request::URI();
         $this->handledURI = explode('/',$this->uri);
         $this->c = count($this->handledURI);
-        $this->method = request::method();
-        require ROOT_PATH.'app/routes.php';
+        $this->method = request::method(); // 使用request类对请求进行解析
+        require ROOT_PATH.'app/routes.php'; // 引入路由表
     }
 
+    // 内部加载控制器所使用的函数
+    // 强行做成类laravel的样式,可能会有安全性漏洞
     private static function loadController($var, $function)
     {
         $eval = str_replace('@', '::', $function);
@@ -26,7 +30,10 @@ class route
         foreach ($var as $key => $value) {
             $eval .= '$var['.$key.'],';
         }
-        $eval = substr($eval, 0, -1);
+        if (count($var) != 0)
+        {
+            $eval = substr($eval, 0, -1);
+        }
         $eval .= ');';
         eval($eval);
     }
