@@ -7,8 +7,15 @@ class home
 {
     public function index()
     {
-        // view('home');
-        name::create(['name' => 'a']);
+        view('home');
 
+    }
+    public function b()
+    {
+        name::delete(['name' => 'a']);
+    }
+    public function c()
+    {
+        name::update(['name' => 'a'], ['name' => 'b']);
     }
 }

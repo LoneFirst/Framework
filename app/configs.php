@@ -1,5 +1,6 @@
 <?php
 $this->config = [
+
     // database config
     'database' => [
         // database is based PDO
