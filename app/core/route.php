@@ -43,7 +43,7 @@ class route
     {
         if ($httpMethod != null) {
             if (is_string($httpMethod)) {
-                if ($this->method != strtoupper($httpMethod){
+                if ($this->method != strtoupper($httpMethod)) {
                     return;
                 }
             }
