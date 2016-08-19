@@ -7,8 +7,7 @@ class home
 {
     public function index()
     {
-        view('home');
-
+        view('home', ['n' => 'hi']);
     }
     public function b()
     {

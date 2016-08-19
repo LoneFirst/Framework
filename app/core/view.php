@@ -4,15 +4,17 @@ namespace core;
 class view
 {
     protected $viewPath;
-    protected $html;
 
     public function __construct($viewName, $data = NULL)
     {
         $this->viewPath = ROOT_PATH.'resources/views/'.$viewName.'.php';
-        // $this->html = fopen($this->view, 'rb');
-        // if (config['template']) {
-        //     $this::handleView();
-        // }
+        if ($data != NULL) {
+            foreach ($data as $key => $value) {
+                $eval = '$this->'.$key.'=\''.$value.'\';';
+                eval($eval);
+            }
+        }
+
         include $this->viewPath;
     }
 
@@ -24,11 +26,5 @@ class view
         }
         $file = ROOT_PATH.'resources/views/'.$viewName.'.php';
         return file_exists($file);
-    }
-
-    // 类laravel模板引擎
-    private static function handleView()
-    {
-
     }
 }

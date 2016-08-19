@@ -38,173 +38,20 @@ class route
         eval($eval);
     }
 
-    public function get($format, $function)
+    // 吃枣要重构,先放着
+    public function reg(string $format, $function, string $httpMethod = null)
     {
-        if ($this->method != 'GET')
-        {
-            return;
-        }
-        $this->handledFormat = explode('/', $format);
-        if (count($this->handledFormat) != $this->c)
-        {
-            return;
-        }
-        $var = array();
-        foreach ($this->handledFormat as $key => $value)
-        {
-            if (substr($value, 0, 1) == ':')
-            {
-                @intval($this->handledURI[$key]);
-                array_push($var, $this->handledURI[$key]);
-                continue;
-            }
-            if ($value != $this->handledURI[$key])
-            {
-                return;
+        if ($httpMethod != null) {
+            if (is_string($httpMethod)) {
+                if ($this->method != strtoupper($httpMethod){
+                    return;
+                }
             }
         }
-        if (is_callable($function))
-        {
-            call_user_func($function);
-            return;
-        }
-        $this::loadController($var, $function);
-    }
-
-    public function post($format, $function)
-    {
-        if ($this->method != 'POST')
+        if ($this->method != strtoupper($httpMethod) && $httpMethod != null)
         {
             return;
         }
-        $this->handledFormat = explode('/', $format);
-        if (count($this->handledFormat) != $this->c)
-        {
-            return;
-        }
-        $var = array();
-        foreach ($this->handledFormat as $key => $value)
-        {
-            if (substr($value, 0, 1) == ':')
-            {
-                @intval($this->handledURI[$key]);
-                array_push($var, $this->handledURI[$key]);
-                continue;
-            }
-            if ($value != $this->handledURI[$key])
-            {
-                return;
-            }
-        }
-        if (is_callable($function))
-        {
-            call_user_func($function);
-            return;
-        }
-        $this::loadController($var, $function);
-    }
-
-    public function put($format, $function)
-    {
-        if ($this->method != 'put')
-        {
-            return;
-        }
-        $this->handledFormat = explode('/', $format);
-        if (count($this->handledFormat) != $this->c)
-        {
-            return;
-        }
-        $var = array();
-        foreach ($this->handledFormat as $key => $value)
-        {
-            if (substr($value, 0, 1) == ':')
-            {
-                @intval($this->handledURI[$key]);
-                array_push($var, $this->handledURI[$key]);
-                continue;
-            }
-            if ($value != $this->handledURI[$key])
-            {
-                return;
-            }
-        }
-        if (is_callable($function))
-        {
-            call_user_func($function);
-            return;
-        }
-        $this::loadController($var, $function);
-    }
-
-    public function delete($format, $function)
-    {
-        if ($this->method != 'DELETE')
-        {
-            return;
-        }
-        $this->handledFormat = explode('/', $format);
-        if (count($this->handledFormat) != $this->c)
-        {
-            return;
-        }
-        $var = array();
-        foreach ($this->handledFormat as $key => $value)
-        {
-            if (substr($value, 0, 1) == ':')
-            {
-                @intval($this->handledURI[$key]);
-                array_push($var, $this->handledURI[$key]);
-                continue;
-            }
-            if ($value != $this->handledURI[$key])
-            {
-                return;
-            }
-        }
-        if (is_callable($function))
-        {
-            call_user_func($function);
-            return;
-        }
-        $this::loadController($var, $function);
-    }
-
-    public function HEAD($format, $function)
-    {
-        if ($this->method != 'HEAD')
-        {
-            return;
-        }
-        $this->handledFormat = explode('/', $format);
-        if (count($this->handledFormat) != $this->c)
-        {
-            return;
-        }
-        $var = array();
-        foreach ($this->handledFormat as $key => $value)
-        {
-            if (substr($value, 0, 1) == ':')
-            {
-                @intval($this->handledURI[$key]);
-                array_push($var, $this->handledURI[$key]);
-                continue;
-            }
-            if ($value != $this->handledURI[$key])
-            {
-                return;
-            }
-        }
-        if (is_callable($function))
-        {
-            call_user_func($function);
-            return;
-        }
-        $this::loadController($var, $function);
-    }
-
-    public function any($format, $function)
-    {
         $this->handledFormat = explode('/', $format);
         if (count($this->handledFormat) != $this->c)
         {

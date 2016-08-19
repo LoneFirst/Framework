@@ -1,5 +1,7 @@
 <?php
 $this->config = [
+    // you can add any custom config Here
+    'sitename' => 'test',
 
     // database config
     'database' => [

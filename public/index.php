@@ -29,9 +29,13 @@ new core\route;
 // @param string view name
 // @param array incoming data
 // @return object view
-function view($viewName)
+function view($viewName, $data = NULL)
 {
-    $view = new core\view($viewName, $data = NULL);
+    if ($data != NULL) {
+        $view = new core\view($viewName, $data);
+        return $view;
+    }
+    $view = new core\view($viewName);
     return $view;
     // 目前视图类功能有限,以下功能暂时不需要
     // $var = func_get_args();
