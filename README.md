@@ -4,13 +4,13 @@ LoneFirstFramework
 > Author : Wang Jie <i@i8e.net>
 
 ### 目录结构
-├─app
-│  ├─controllers (用来存放控制器文件)
-│  ├─core (框架文件)
-│  └─models (用来存放模型文件)
-├─public (用来存放外部文件,请将该目录设置为网站的根目录或将请求内容重定向至此)
-├─resources
-   └─views (用来存放视图文件)
+    ├─app
+    │  ├─controllers (用来存放控制器文件)
+    │  ├─core (框架文件)
+    │  └─models (用来存放模型文件)
+    ├─public (用来存放外部文件,请将该目录设置为网站的根目录或将请求内容重定向至此)
+    ├─resources
+    └─views (用来存放视图文件)
 
 
 ### 设置路由规则
