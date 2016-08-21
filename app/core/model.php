@@ -36,8 +36,7 @@ class model
         $values = substr($values, 0, -1);
 
         // connect database
-        $db = new database;
-        $c = $db->get();
+        $c = database::get();
 
         $setting = self::getSetting();
 
@@ -58,8 +57,7 @@ class model
         $where = array_keys($location);
 
         // connect database
-        $db = new database;
-        $c = $db->get();
+        $c = database::get();
 
         $setting = self::getSetting();
 
@@ -83,8 +81,7 @@ class model
         }
         $handledData = substr($handledData, 0, -1);
 
-        $db = new database;
-        $c = $db->get();
+        $c = database::get();
 
         $setting = self::getSetting();
 

@@ -24,8 +24,9 @@ class route
     // 强行做成类laravel的样式,可能会有安全性漏洞
     private static function loadController($var, $function)
     {
-        $eval = str_replace('@', '::', $function);
-        $eval = 'controller\\'.$eval;
+        $tmp = explode('@', $function);
+        $eval = array_shift($tmp).'Controller::'.array_shift($tmp);
+        $eval = 'controllers\\'.$eval;
         $eval .= '(';
         foreach ($var as $key => $value) {
             $eval .= '$var['.$key.'],';
@@ -47,10 +48,6 @@ class route
                     return;
                 }
             }
-        }
-        if ($this->method != strtoupper($httpMethod) && $httpMethod != null)
-        {
-            return;
         }
         $this->handledFormat = explode('/', $format);
         if (count($this->handledFormat) != $this->c)

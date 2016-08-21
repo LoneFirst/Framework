@@ -9,10 +9,7 @@ class view
     {
         $this->viewPath = ROOT_PATH.'resources/views/'.$viewName.'.php';
         if ($data != NULL) {
-            foreach ($data as $key => $value) {
-                $eval = '$this->'.$key.'=\''.$value.'\';';
-                eval($eval);
-            }
+            $this->data = $data;
         }
 
         include $this->viewPath;
