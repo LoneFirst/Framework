@@ -9,6 +9,7 @@ class route
     protected $handledFormat;
     protected $c;
     protected $method;
+    protected $notfound = true;
 
     // 在这里进行流程的总览
     public function __construct()
@@ -18,6 +19,10 @@ class route
         $this->c = count($this->handledURI);
         $this->method = request::method(); // 使用request类对请求进行解析
         require ROOT_PATH.'app/routes.php'; // 引入路由表
+        if ($this->notfound) {
+            header('HTTP/1.1 404 Not Found');
+            header("status: 404 Not Found");
+        }
     }
 
     // 内部加载控制器所使用的函数
@@ -73,6 +78,7 @@ class route
             call_user_func($function);
             return;
         }
+        $this->notfound = false;
         $this::loadController($var, $function);
     }
 }
