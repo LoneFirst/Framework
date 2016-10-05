@@ -15,7 +15,7 @@ class route
     public function __construct()
     {
         $this->uri = request::URI();
-        $this->handledURI = explode('/',$this->uri);
+        $this->handledURI = $this->handleURI($this->uri);
         $this->c = count($this->handledURI);
         $this->method = request::method(); // 使用request类对请求进行解析
         require ROOT_PATH.'app/routes.php'; // 引入路由表
@@ -23,6 +23,14 @@ class route
             header('HTTP/1.1 404 Not Found');
             header("status: 404 Not Found");
         }
+    }
+
+    // 处理uri将后缀形式的参数进行处理
+    private function handleURI($uri)
+    {
+        $uri = substr($uri, 0, strpos($uri, '?'));
+        $uri = explode('/', $uri);
+        return $uri;
     }
 
     // 内部加载控制器所使用的函数
