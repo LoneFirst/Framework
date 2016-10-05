@@ -75,6 +75,12 @@ class model
         // solve st
         $where = array_keys($location);
 
+        $where = '';
+        foreach ($location as $key => $value) {
+            $where .= '`'.$key.'` = \''.$value.'\' AND ';
+        }
+        $where = substr($where, 0, -5);
+
         $handledData = '';
         foreach ($data as $key => $value) {
             $handledData .= '`'.$key.'` =  \''.$value.'\',';
@@ -85,8 +91,17 @@ class model
 
         $setting = self::getSetting();
 
-        $sql = "UPDATE `{$setting['table']}` SET {$handledData} WHERE `{$where[0]}` = '{$location[$where[0]]}';";
-        echo $sql;
+        $sql = "UPDATE `{$setting['table']}` SET {$handledData} WHERE {$where};";
+        return $c->query($sql);
+    }
+
+    // execute original sql and return the PDOStatement
+    // however, this function is not recommended
+    // @param string sql
+    // @return PDOStatement
+    public function query(string $sql)
+    {
+        $c = database::get();
         return $c->query($sql);
     }
 }
