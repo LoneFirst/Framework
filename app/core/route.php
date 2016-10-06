@@ -38,7 +38,6 @@ class route
     }
 
     // 内部加载控制器所使用的函数
-    // 强行做成类laravel的样式,可能会有安全性漏洞
     private function loadController($var, $function)
     {
         $tmp = explode('@', $function);
@@ -48,9 +47,16 @@ class route
             return;
         }
 
-        // 这里应该判断类里存不存在指定函数,暂时不知道怎么实现
-
         $controllerName = 'controllers\\'.$controllerName;
+
+        // 这里要先通过实例化引入类才可也在后面获取方法成员
+        // 这里也让控制器的构造函数有了意义 一举双鸟
+        eval('new '.$controllerName.';');
+        $functionList = get_class_methods($controllerName);
+        if(!in_array($functionName, $functionList)) {
+            return;
+        }
+
         $this->notfound = false;
 
         $eval = $controllerName.'::'.$functionName;
