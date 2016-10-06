@@ -18,12 +18,12 @@ LoneFirstFramework
  - 使用n `$this->reg()` 函数来注册一条路由规则,下面是该函数的使用方法
      - 第一个参数必须为`string`类型且不能包含`/`,如果需要传入包含该符号的参数请自行进行处理.你可以使某一段以`:`开头来作为参数,路径中的这部分会自动依序成为指定控制器方法的参数
      - 第二个参数可以为`string`类型或者`callback`类型,用来指定该路由进行的操作,如果要指定一个控制器的某一函数请用`@`来链接控制器名和函数名,如果是一个回掉函数则会直接执行
-     - 第三个参数为`string`类型,该参数可选,用来指定允许的HTTP方法
+     - 第三个参数为`string`或 `array` 类型,该参数可选,用来指定允许的HTTP方法
 
 实例:
 
  ```php
- $this->reg('name/:id', 'name@getNameById', 'get');
+ $this->reg('name/:id', 'name@getNameById', ['get', 'head']);
  // 当访问 yourdomain/name/:id 时将会调用 nameController 中的 getNameById(:id) 函数
 
  $this->reg('say/hi', function() {echo 'hi';});

@@ -73,13 +73,22 @@ class route
     }
 
     // 吃枣要重构,先放着
-    public function reg(string $format, $function, string $httpMethod = null)
+    public function reg(string $format, $function, $httpMethod = null)
     {
         if ($httpMethod != null) {
             if (is_string($httpMethod)) {
                 if ($this->method != strtoupper($httpMethod)) {
                     return;
                 }
+            }elseif (is_array($httpMethod)) {
+                foreach ($httpMethod as $key => $value) {
+                    $httpMethod[$key] = strtoupper($value);
+                }
+                if (!in_array($this->method, $httpMethod)) {
+                    return;
+                }
+            }else{
+                return;
             }
         }
         $this->handledFormat = explode('/', $format);
