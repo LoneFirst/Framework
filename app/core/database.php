@@ -5,9 +5,7 @@ use PDO;
 
 class database
 {
-    private $db;
-
-    public function __construct()
+    public function get()
     {
         if (config('database:type') == 'mysql')
         {
@@ -18,7 +16,8 @@ class database
             $dbname = config('database:mysql:dbname');
 
             $dsn = "mysql:host={$host};port={$port};dbname={$dbname};";
-            $this->db = new PDO($dsn, $user, $pass);
+            $db = new PDO($dsn, $user, $pass);
+            return $db;
         }
 
         // if (config('database:type') == 'sqlite')
@@ -26,13 +25,5 @@ class database
         //     $dsn = config('database:sqlite:url');
         //     $this->db = new PDO($dsn);
         // }
-    }
-    public function get()
-    {
-        if (is_null($this->db))
-        {
-            $this->__construct();
-        }
-        return $this->db;
     }
 }

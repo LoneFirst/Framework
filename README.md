@@ -3,37 +3,48 @@ LoneFirstFramework
 
 > Author : Wang Jie <i@i8e.net>
 
-### Directory structure
+### 目录结构
+    ├─app
+    │  ├─controllers (用来存放控制器文件)
+    │  ├─core (框架文件)
+    │  └─models (用来存放模型文件)
+    ├─public (用来存放外部文件,请将该目录设置为网站的根目录或将请求内容重定向至此)
+    ├─resources
+    └─views (用来存放视图文件)
 
-### Set route rule
- - You can set route rule on `app/routes.php`.
- - You must use function `$this->reg()`.
- - The function `$this->reg(string $format, string $function, string $httpMethod = null)` could be afferent 3 string parameters.
- - The first parameter $format define the route format.Can not exist `/` in front of this string.And if a section you can add a `:` in front of that section and the content of this section in URL will be a parameter of the function in controller.
- - The second parameter must be a string or a callback function $function include the controller name and the function name.Connect these with `@`
- - The third parameter is an optional parameter. As the name suggests this is the http method.
 
- example:
+### 设置路由规则
+ - 你可以在 `app/routes.php` 里设置路由规则
+ - 使用 `$this->reg()` 函数来注册一条路由规则,下面是该函数的使用方法
+     - 第一个参数必须为`string`类型且不能包含`/`,如果需要传入包含该符号的参数请自行进行处理.你可以使某一段以`:`开头来作为参数,路径中的这部分会自动依序成为指定控制器方法的参数
+     - 第二个参数可以为`string`类型或者`callback`类型,用来指定该路由进行的操作,如果要指定一个控制器的某一函数请用`@`来链接控制器名和函数名,如果是一个回掉函数则会直接执行
+     - 第三个参数为`string`或 `array` 类型,该参数可选,用来指定允许的HTTP方法
+
+实例:
 
  ```php
- $this->reg('name/:id', 'name@getNameById', 'get');
- // this will use getNameById(:id); in name controller
+ $this->reg('name/:id', 'name@getNameById', ['get', 'head']);
+ // 当访问 yourdomain/name/:id 时将会调用 nameController 中的 getNameById(:id) 函数
+
+ $this->reg('say/hi', function() {echo 'hi';});
+ // 当访问 yourdomain/say/hi 时会显示 'hi'
  ```
 
-### Use model
- - You can create an model class in  `app/model`.
- - We have had a model farther class you just need to make your model class extend core\model and it include 3 function : create() delete() update(). You can read the source code of core\model.php to learn to use them.Of course you can write a new function.
+### 使用模型
+ - 你可以将模型类放在 `app/models/` 目录中
+ - 框架具有一个模型父类,只要你继承 `core\model` 就可以使用一些通用的函数.你可以阅读 `core/model.php` 中的代码来了解具体它是如何使用的
 
-### Global function
-We have 2 global function now : view() config()
+### 全局函数
+框架具有以下全局函数,可以在任何地方使用
 
 #### view()
- - It will export a view in `resources/views/`
- - The first parameter is the name of view
- - The second parameter is optional and it set variables by array
+ - 可以显示 `resources/views/` 中的视图
+ - 第一个必选参数为视图的名称
+ - 第二个可选参数为要传入的数据,可以在视图文件中以`$this->data`来使用所传入的数据
 
 #### config()
- - It will return the element of the `app/configs.php`
- - It just need a string parameter use `:` to connect two levels
+ - 可以返回 `app/configs.php` 中的设置
+ - 唯一一个参数为所需要的设置,只要在每级之间用`:`来连接就可以了
 
-### Easy to connect to database
+### 非常简单的连接到数据库
+框架自带基于PDO的数据库类,可以在任何一个地方使用 `core\database::get()` 都可以返回一个PDO类型的对象
