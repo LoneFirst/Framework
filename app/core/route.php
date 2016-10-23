@@ -7,10 +7,11 @@ class route
     protected $uri; // 请求的uri
     protected $handledURI; // 经过处理的uri
     protected $handledFormat; // 经过处理的路由格式
-    protected $c; // 节点个数
+    protected $c; // 请求的节点个数
     protected $method; // 请求的方法
     protected $notfound = true; // 没有找到对应的路由规则
     protected $controllerList; // 控制器列表
+    protected $locker = false; // 一旦路由规则匹配即立即锁死
 
     // 在这里进行流程的总览
     public function __construct()
@@ -31,6 +32,8 @@ class route
     private function handleURI($uri)
     {
         if(strpos($uri, '?')) {
+            $uri = substr($uri, 0, strpos($uri, '?'));
+        }elseif(strpos($uri, '#')) {
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
         $uri = explode('/', $uri);
@@ -75,6 +78,9 @@ class route
     // 吃枣要重构,先放着
     public function reg(string $format, $function, $httpMethod = null)
     {
+        if ($this->locker) {
+            return;
+        }
         if ($httpMethod != null) {
             if (is_string($httpMethod)) {
                 if ($this->method != strtoupper($httpMethod)) {
@@ -101,7 +107,7 @@ class route
         {
             if (substr($value, 0, 1) == ':')
             {
-                @intval($this->handledURI[$key]);
+                @intval($this->handledURI[$key]); // 尝试将参数转换成整数类型
                 array_push($var, $this->handledURI[$key]);
                 continue;
             }
@@ -115,6 +121,7 @@ class route
             call_user_func($function);
             return;
         }
+        $this->locker = true;
         $this::loadController($var, $function);
     }
 
