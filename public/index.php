@@ -29,27 +29,8 @@ new core\route;
 // @param string view name
 // @param array incoming data
 // @return object view
-function view($viewName, $data = NULL)
+function view($viewName,array $data = NULL)
 {
-    if ($data != NULL) {
-        $view = new core\view($viewName, $data);
-        return $view;
-    }
-    $view = new core\view($viewName);
+    $view = new core\view($viewName, $data);
     return $view;
-    // 目前视图类功能有限,以下功能暂时不需要
-    // $var = func_get_args();
-    // if (count($var) == 0)
-    // {
-    //     $view = new core\view();
-    //     return $view;
-    // }
-    // $eval = '$view = new core\view(';
-    // foreach ($var as $key => $value) {
-    //     $eval .= '$var['.$key.'],';
-    // }
-    // $eval = substr($eval, 0, -1);
-    // $eval .= ');';
-    // eval($eval);
-    // return $view;
 }

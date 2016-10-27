@@ -9,4 +9,9 @@ class homeController
     {
         view('home');
     }
+
+    public function test()
+    {
+        view('test', ['title' => 'hello world'])->push('www', 'xxx')->render();
+    }
 }

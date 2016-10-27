@@ -20,6 +20,11 @@ $this->config = [
     ],
 
     // template engine switch
+
+    /* 
+     * turn on the template engine will reduce the diffculty of develop
+     * turn off the template engine will save the CPU time and RAM
+     */
     'template' => true,
 
 ];

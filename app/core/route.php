@@ -54,7 +54,7 @@ class route
 
         // 这里要先通过实例化引入类才可也在后面获取方法成员
         // 这里也让控制器的构造函数有了意义 一举双鸟
-        eval('new '.$controllerName.';');
+        $controller = new $controllerName();
         $functionList = get_class_methods($controllerName);
         if(!in_array($functionName, $functionList)) {
             return;
@@ -62,17 +62,8 @@ class route
 
         $this->notfound = false;
 
-        $eval = $controllerName.'::'.$functionName;
-        $eval .= '(';
-        foreach ($var as $key => $value) {
-            $eval .= '$var['.$key.'],';
-        }
-        if (count($var) != 0)
-        {
-            $eval = substr($eval, 0, -1);
-        }
-        $eval .= ');';
-        eval($eval);
+        // 采用更加安全的形式来调用函数
+        call_user_func_array(array($controllerName, $functionName), $var);
     }
 
     // 吃枣要重构,先放着
