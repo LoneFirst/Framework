@@ -45,6 +45,28 @@ class view
         }
         $source = $this->protectCode($source);
 
+        // extends e.g. @extends home
+        while(preg_match('/@extends/', $source)) {
+            $source = preg_replace_callback('/@extends\s(.*)$/', array($this, 'extends'), $source);
+            $source = $this->protectCode($source);
+        }
+        // if e.g. @if true
+        $source = preg_replace('/@if\s(.*)$/', '<?php if\\1 {?>', $source);
+        $source = preg_replace('/@elseif\s(.*)$/', '<?php }elseif\\1 {?>', $source);
+        $source = preg_replace('/@else\s(.*)$/', '<?php }else{?>', $source);
+        $source = preg_replace('/@endif$/', '<?php }?>', $source);
+        $source = $this->protectCode($source);
+
+        // loop e.g. @for
+        $source = preg_replace('/@for\s(.*)$/', '<?php for\\1 {?>', $source);
+        $source = preg_replace('/@endfor$/', '<?php }?>', $source);
+
+        $source = preg_replace('/@foreach\s(.*)$/', '<?php foreach\\1 {?>', $source);
+        $source = preg_replace('/@endforeach$/', '<?php }?>', $source);
+
+        $source = preg_replace('/@while\s(.*)$/', '<?php while\\1 {?>', $source);
+        $source = preg_replace('/@endwhile$/', '<?php }?>', $source);
+
         // varibles e.g. {{ $n }}
         $source = preg_replace('/\{\{\s(.*)\s\}\}/', '<?php echo \\1;?>', $source);
         $source = $this->protectCode($source);
@@ -63,6 +85,24 @@ class view
             throw new exception('缓存文件不可写');
         }
         file_put_contents($this->viewTempPath, $output);
+    }
+
+    //
+    private function extends($matches)
+    {
+        $extendsPath = ROOT_PATH.'resources/views/'.$matches[1].'.tpl';
+        if(!file_exists($extendsPath)) {
+            throw new exception("不存在对应的模板文件".$extendsPath, 1);
+        }
+        $h = @fopen($extendsPath, 'rb');
+        if (!$h) {
+            return;
+        }
+        $source = '';
+        while (!feof($h)) {
+            $source .= fread($h, 8192);
+        }
+        return $source;
     }
 
     public function render()
