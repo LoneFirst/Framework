@@ -27,12 +27,14 @@ class view
         return file_exists($file);
     }
 
+    // 向视图中填入数据
     public function push($key, $value)
     {
         $this->data[$key] = $value;
         return $this;
     }
 
+    // 根据模板引擎处理视图文件
     private function handleView()
     {
         $h = @fopen($this->viewPath, 'rb');
@@ -66,16 +68,16 @@ class view
 
         $source = preg_replace('/@while\s(.*)$/', '<?php while\\1 {?>', $source);
         $source = preg_replace('/@endwhile$/', '<?php }?>', $source);
+        $source = $this->protectCode($source);
 
         // varibles e.g. {{ $n }}
+        $source = preg_replace('/\{\{\s(\S*)\sor\s(\S*)\s\}\}/', '<?php if(isset(\\1)){echo \\1;}else{echo \\2;}?>', $source);
         $source = preg_replace('/\{\{\s(.*)\s\}\}/', '<?php echo \\1;?>', $source);
         $source = $this->protectCode($source);
         // replace...
 
         $source = $this->popCode($source);
-        $output = '<?php'.PHP_EOL;
-        $output .= 'if(!defined(\'ROOT_PATH\'))exit();'.PHP_EOL;
-        $output .= '?>'.PHP_EOL;
+        $output = '<?php if(!defined(\'ROOT_PATH\'))exit();?>'.PHP_EOL;
         $output .= trim($source);
         $output = preg_replace('/\s*\?\>\s*\<\?php\s*/is', PHP_EOL, $output);
         if (!file_exists($this->viewTempPath)) {
@@ -87,7 +89,7 @@ class view
         file_put_contents($this->viewTempPath, $output);
     }
 
-    //
+    // 引入继承的模板文件所采用的回调函数
     private function extends($matches)
     {
         $extendsPath = ROOT_PATH.'resources/views/'.$matches[1].'.tpl';
@@ -111,8 +113,14 @@ class view
         foreach ($this->data as $key => $value) {
             $$key = $value;
         }
-        if (!config('template')) {
+        if (!config('template:0')) {
             include $this->viewPath;
+            return;
+        }
+
+        if (!config('template:cache')) {
+            $this->handleView();
+            include $this->viewTempPath;
             return;
         }
 
@@ -124,6 +132,7 @@ class view
             $this->handleView();
         }
         include $this->viewTempPath;
+        return;
     }
 
     // 将php代码替换避免受到影响

@@ -7,6 +7,6 @@ class homeController
 {
     public function index()
     {
-        view('test')->render();
+        view('status')->push('title', 'Oops!')->push('error', '404')->render();
     }
 }
