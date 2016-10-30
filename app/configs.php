@@ -19,6 +19,10 @@ $this->config = [
 
     ],
 
+
+    // set date default timezone
+    'timezone' => 'Asia/Shanghai';
+
     // template engine switch
 
     /*

@@ -109,7 +109,7 @@ class route
         }
         if (is_callable($function))
         {
-            call_user_func($function);
+            call_user_func_array($function, $var);
             return;
         }
         $this->locker = true;
