@@ -3,14 +3,25 @@ namespace core;
 
 class request
 {
-    public function URI()
+    private static $URI;
+    private static $method;
+
+    public static function URI()
     {
-        return substr($_SERVER['REQUEST_URI'],strpos($_SERVER['PHP_SELF'],'index.php'));
+        if (isset(self::$URI)) {
+            return self::$URI;
+        } else {
+            return substr($_SERVER['REQUEST_URI'],strpos($_SERVER['PHP_SELF'],'index.php'));
+        }
     }
 
-    public function method()
+    public static function method()
     {
-        return $_SERVER['REQUEST_METHOD'];
+        if (isset(self::$method)) {
+            return self::$method;
+        } else {
+            return $_SERVER['REQUEST_METHOD'];
+        }
     }
 
     public function upload($name, $savePath, $restriction, callback $savename, callback $verify)

@@ -53,21 +53,21 @@ class view
             $source = $this->protectCode($source);
         }
         // if e.g. @if true
-        $source = preg_replace('/@if\s(.*)$/', '<?php if\\1 {?>', $source);
-        $source = preg_replace('/@elseif\s(.*)$/', '<?php }elseif\\1 {?>', $source);
-        $source = preg_replace('/@else\s(.*)$/', '<?php }else{?>', $source);
-        $source = preg_replace('/@endif$/', '<?php }?>', $source);
+        $source = preg_replace('/@if\s(.*)/', '<?php if (\\1) {?>', $source);
+        $source = preg_replace('/@elseif\s(.*)/', '<?php }elseif (\\1) {?>', $source);
+        $source = preg_replace('/@else/', '<?php }else{?>', $source);
+        $source = preg_replace('/@endif/', '<?php }?>', $source);
         $source = $this->protectCode($source);
 
         // loop e.g. @for
-        $source = preg_replace('/@for\s(.*)$/', '<?php for\\1 {?>', $source);
-        $source = preg_replace('/@endfor$/', '<?php }?>', $source);
+        $source = preg_replace('/@for\s(.*)/', '<?php for\\1 {?>', $source);
+        $source = preg_replace('/@endfor/', '<?php }?>', $source);
 
-        $source = preg_replace('/@foreach\s(.*)$/', '<?php foreach\\1 {?>', $source);
-        $source = preg_replace('/@endforeach$/', '<?php }?>', $source);
+        $source = preg_replace('/@foreach\s(.*)/', '<?php foreach\\1 {?>', $source);
+        $source = preg_replace('/@endforeach/', '<?php }?>', $source);
 
-        $source = preg_replace('/@while\s(.*)$/', '<?php while\\1 {?>', $source);
-        $source = preg_replace('/@endwhile$/', '<?php }?>', $source);
+        $source = preg_replace('/@while\s(.*)/', '<?php while\\1 {?>', $source);
+        $source = preg_replace('/@endwhile/', '<?php }?>', $source);
         $source = $this->protectCode($source);
 
         // varibles e.g. {{ $n }}

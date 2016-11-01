@@ -22,9 +22,10 @@ class route
         $this->method = request::method(); // 使用request类对请求进行解析
         $this->controllerList = $this->listControllers();
         require ROOT_PATH.'app/routes.php'; // 引入路由表
+        log::writeHttpLog($this->generateLog());
         if ($this->notfound) {
-            header('HTTP/1.1 404 Not Found');
-            header("status: 404 Not Found");
+            view('status')->push('title', 'Oops!')->push('error', '404')->render();
+            exit();
         }
     }
 
@@ -63,7 +64,8 @@ class route
         $this->notfound = false;
 
         // 采用更加安全的形式来调用函数
-        call_user_func_array(array($controllerName, $functionName), $var);
+        // 上面已经实例化了控制器类 下面可以直接使用
+        call_user_func_array(array($controller, $functionName), $var);
     }
 
     // 吃枣要重构,先放着
@@ -123,5 +125,15 @@ class route
             $fileList[$key] = substr($value, 0, -4);
         }
         return $fileList;
+    }
+
+    private function generateLog()
+    {
+        $log = '';
+        $log .= date('c', $_SERVER['REQUEST_TIME']).' ';
+        $log .= $_SERVER['REMOTE_ADDR'].':'.$_SERVER['REMOTE_PORT'].' ';
+        $log .= $this->method.' '.$this->uri.' ';
+        $log .= $_SERVER['HTTP_USER_AGENT'];
+        return $log;
     }
 }

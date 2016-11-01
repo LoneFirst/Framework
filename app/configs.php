@@ -3,6 +3,9 @@ $this->config = [
     // you can add any custom config Here
     'sitename' => 'test',
 
+    // show the debug message or not
+    'debug' => true,
+
     // database config
     'database' => [
         // database is based PDO
@@ -21,7 +24,7 @@ $this->config = [
 
 
     // set date default timezone
-    'timezone' => 'Asia/Shanghai';
+    'timezone' => 'Asia/Shanghai',
 
     // template engine switch
 
@@ -33,5 +36,9 @@ $this->config = [
         0 => true, // this is the switcher of the template engine
         'cache' => false, // cache the handled view temp or not
     ],
+
+    'log' => [
+        'path' => ROOT_PATH.'log/',
+    ]
 
 ];

@@ -16,6 +16,7 @@ function hi()
 {
     echo 'hi';
 }
+core\error::registerHandler();
 date_default_timezone_set(config('timezone'));
 session_start();
 new core\route;
@@ -34,6 +35,7 @@ function view($viewName,array $data = NULL)
 
 function redirect(string $url) {
     header('Location: '.$url);
+    exit();
 }
 
 function response() {
