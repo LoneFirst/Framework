@@ -95,6 +95,32 @@ class model
         return $c->query($sql);
     }
 
+    // select one row of data
+    // @param array $column column of needed
+    // @param array $location rule
+    // @return row data
+    public function select(array $column, array $location)
+    {
+        $handledColumn = '';
+        foreach ($column as $key => $value) {
+            $handledColumn .= '`'.$value.'`,';
+        }
+        $handledColumn = substr($handledColumn, 0, -1);
+
+        $where = '';
+        foreach ($location as $key => $value) {
+            $where .= '`'.$key.'` = \''.$value.'\' AND ';
+        }
+        $where = substr($where, 0, -5);
+
+        $c = database::get();
+
+        $setting = self::getSetting();
+
+        $sql = "SELECT {$handledColumn} FROM {$setting['table']} WHERE {$where};";
+        return $c->query($sql)->fetch();
+    }
+
     // execute original sql and return the PDOStatement
     // however, this function is not recommended
     // @param string sql
