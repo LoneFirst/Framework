@@ -84,7 +84,7 @@ class view
             @touch($this->viewTempPath);
         }
         if (!is_writable($this->viewTempPath)) {
-            throw new exception('缓存文件不可写');
+            throw new error('缓存文件不可写');
         }
         file_put_contents($this->viewTempPath, $output);
     }
@@ -94,7 +94,7 @@ class view
     {
         $extendsPath = ROOT_PATH.'resources/views/'.$matches[1].'.tpl';
         if(!file_exists($extendsPath)) {
-            throw new exception("不存在对应的模板文件".$extendsPath, 1);
+            throw new error("不存在对应的模板文件".$extendsPath, 1);
         }
         $h = @fopen($extendsPath, 'rb');
         if (!$h) {
@@ -125,7 +125,7 @@ class view
         }
 
         if (!file_exists($this->viewPath) && !file_exists($this->viewTempPath)) {
-            throw new exception('不存在对应的视图文件');
+            throw new error('不存在对应的视图文件');
         }elseif (!file_exists($this->viewTempPath)) {
             $this->handleView();
         }elseif (filemtime($this->viewTempPath) <= filemtime($this->viewPath)) {

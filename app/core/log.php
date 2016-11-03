@@ -14,7 +14,7 @@ class log
             @touch($logFile);
         }
         if (!is_writable($logPath)) {
-            throw new Exception("日志文件不可写", 1);
+            throw new error("日志文件不可写", 1);
         }
         $h = @fopen($logFile, 'ab');
         fwrite($h, $log.PHP_EOL);
