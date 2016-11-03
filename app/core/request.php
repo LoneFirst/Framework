@@ -33,7 +33,7 @@ class request
             return;
         }
         if ($file['error'] > 0) {
-            throw new Exception($file['error'], 1);
+            throw new error($file['error'], 1);
         } elseif (call_user_func_array($verify, $file)) {
             $name = call_user_func_array($savename, $file);
             move_uploaded_file($file['tmp_name'], $savePath.$name);

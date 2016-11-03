@@ -33,10 +33,6 @@ class response
 
     public function json(array $data)
     {
-        if ($this->headersSent) {
-            throw new Exception("header has sent", 1);
-            return;
-        }
         header('Content-type: application/json');
         echo json_encode($data);
     }
