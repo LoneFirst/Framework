@@ -24,19 +24,21 @@ class request
         }
     }
 
-    public function upload($name, $savePath, $restriction, callback $savename, callback $verify)
+    public function upload($name, $savePath, array $restriction, callback $savename, callback $verify)
     {
         $file = $_FILES[$name];
-        $fileCorrect = ((is_array($restriction)?in_array($file['type'], $restriction['type']):($file['type'] == $restriction['type'])) &&
-                        ($file['size'] <= $restriction['sizelimit']));
+        $typeResult = array_key_exists('type', $restriction)?in_array($file['type'], $restriction['type']):true;
+        $sizeResult = array_key_exists('type', $restriction)?($file['size'] <= $restriction['sizelimit']):true;
+        $fileCorrect = ($typeResult && $sizeResult);
         if(!$fileCorrect) {
-            return;
+            return $this;
         }
         if ($file['error'] > 0) {
             throw new error($file['error'], 1);
-        } elseif (call_user_func_array($verify, $file)) {
-            $name = call_user_func_array($savename, $file);
+        } elseif (call_user_func($verify, $file)) {
+            $name = call_user_func($savename, $file);
             move_uploaded_file($file['tmp_name'], $savePath.$name);
         }
+        return $this;
     }
 }

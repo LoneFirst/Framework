@@ -5,7 +5,7 @@ use core\database;
 
 class model
 {
-    protected function getSetting()
+    protected static function getSetting()
     {
         // get setting
         $setting['calledVars'] = get_class_vars(get_called_class());
@@ -23,20 +23,19 @@ class model
     // create a record
     // @param array data
     // @return PDOStatement
-    public function create(array $data)
+    public static function create(array $data)
     {
+        $c = database::get();
+
         // solve st
         $keys = '';
         $values = '';
         foreach ($data as $key => $value) {
             $keys .= '`'.$key.'`,';
-            $values .= '\''.$value.'\',';
+            $values .= $c->quote($value).',';
         }
         $keys = substr($keys, 0, -1);
         $values = substr($values, 0, -1);
-
-        // connect database
-        $c = database::get();
 
         $setting = self::getSetting();
 
@@ -51,17 +50,22 @@ class model
     // but for my laziness, I did not do so :p
     // @param array rule
     // @return PDOStatement
-    public function delete(array $location)
+    public static function delete(array $location)
     {
-        // easy solve st
+        $c = database::get();
+
+        // solve st
         $where = array_keys($location);
 
-        // connect database
-        $c = database::get();
+        $where = '';
+        foreach ($location as $key => $value) {
+            $where .= '`'.$key.'` = '.$c->quote($value).' AND ';
+        }
+        $where = substr($where, 0, -5);
 
         $setting = self::getSetting();
 
-        $sql = "DELETE FROM `{$setting['table']}` WHERE `{$where[0]}` = '{$location[$where[0]]}';";
+        $sql = "DELETE FROM `{$setting['table']}` WHERE {$where};";
 
         return $c->query($sql);
     }
@@ -70,24 +74,24 @@ class model
     // @param array locate a record
     // @param array data to update
     // @return PDOStatement
-    public function update(array $location, array $data)
+    public static function update(array $location, array $data)
     {
+        $c = database::get();
+
         // solve st
         $where = array_keys($location);
 
         $where = '';
         foreach ($location as $key => $value) {
-            $where .= '`'.$key.'` = \''.$value.'\' AND ';
+            $where .= '`'.$key.'` = '.$c->quote($value).' AND ';
         }
         $where = substr($where, 0, -5);
 
         $handledData = '';
         foreach ($data as $key => $value) {
-            $handledData .= '`'.$key.'` =  \''.$value.'\',';
+            $handledData .= '`'.$key.'` =  '.$c->quote($value).',';
         }
         $handledData = substr($handledData, 0, -1);
-
-        $c = database::get();
 
         $setting = self::getSetting();
 
@@ -99,8 +103,10 @@ class model
     // @param array $column column of needed
     // @param array $location rule
     // @return row data
-    public function select(array $column, array $location)
+    public static function select(array $column, array $location)
     {
+        $c = database::get();
+
         $handledColumn = '';
         foreach ($column as $key => $value) {
             $handledColumn .= '`'.$value.'`,';
@@ -109,11 +115,9 @@ class model
 
         $where = '';
         foreach ($location as $key => $value) {
-            $where .= '`'.$key.'` = \''.$value.'\' AND ';
+            $where .= '`'.$key.'` = '.$c->quote($value).' AND ';
         }
         $where = substr($where, 0, -5);
-
-        $c = database::get();
 
         $setting = self::getSetting();
 
@@ -125,7 +129,7 @@ class model
     // however, this function is not recommended
     // @param string sql
     // @return PDOStatement
-    public function query(string $sql)
+    public static function query(string $sql)
     {
         $c = database::get();
         return $c->query($sql);

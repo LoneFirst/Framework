@@ -5,6 +5,9 @@ class log
 {
     public static function writeHttpLog($log)
     {
+        if (!config('log:0')) {
+            return;
+        }
         $logPath = config('log:path');
         $logFile = $logPath.date('Y-m-d').'.log';
         if (!file_exists($logFile)) {
