@@ -10,7 +10,7 @@ class view
 
     public function __construct($viewName, $data = NULL)
     {
-        $this->viewPath = ROOT_PATH.'resources/views/'.$viewName.'.tpl';
+        $this->viewPath = ROOT_PATH.'resources/views/'.$viewName.'.html';
         $this->viewTempPath = ROOT_PATH.'cache/'.md5($viewName).'.php';
         if ($data != NULL) {
             $this->data = $data;
@@ -60,14 +60,16 @@ class view
         $source = $this->protectCode($source);
 
         // loop e.g. @for
-        $source = preg_replace('/@for\s(.*)/', '<?php for\\1 {?>', $source);
-        $source = preg_replace('/@endfor/', '<?php }?>', $source);
-
-        $source = preg_replace('/@foreach\s(.*)/', '<?php foreach\\1 {?>', $source);
+        $source = preg_replace('/@foreach\s(.*)/', '<?php foreach (\\1) {?>', $source);
         $source = preg_replace('/@endforeach/', '<?php }?>', $source);
+        $source = $this->protectCode($source);
 
-        $source = preg_replace('/@while\s(.*)/', '<?php while\\1 {?>', $source);
+        $source = preg_replace('/@while\s(.*)/', '<?php while (\\1) {?>', $source);
         $source = preg_replace('/@endwhile/', '<?php }?>', $source);
+        $source = $this->protectCode($source);
+
+        $source = preg_replace('/@for\s(.*)/', '<?php for (\\1) {?>', $source);
+        $source = preg_replace('/@endfor/', '<?php }?>', $source);
         $source = $this->protectCode($source);
 
         // varibles e.g. {{ $n }}
@@ -77,6 +79,9 @@ class view
         // replace...
 
         $source = $this->popCode($source);
+
+        $source = preg_replace('/^[ \t]*(.+)[ \t]*$/m', '\\1', $source);
+        $source = preg_replace('/\n\r/m', '', $source);
         $output = '<?php if(!defined(\'ROOT_PATH\'))exit();?>'.PHP_EOL;
         $output .= trim($source);
         $output = preg_replace('/\s*\?\>\s*\<\?php\s*/is', PHP_EOL, $output);
@@ -92,7 +97,7 @@ class view
     // 引入继承的模板文件所采用的回调函数
     private function extends($matches)
     {
-        $extendsPath = ROOT_PATH.'resources/views/'.$matches[1].'.tpl';
+        $extendsPath = ROOT_PATH.'resources/views/'.$matches[1].'.html';
         if(!file_exists($extendsPath)) {
             throw new error("不存在对应的模板文件".$extendsPath, 1);
         }

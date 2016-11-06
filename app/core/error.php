@@ -1,7 +1,7 @@
 <?php
 namespace core;
 
-class error extends \Exception
+class Error extends \Exception
 {
     private $trace;
 
@@ -38,9 +38,10 @@ class error extends \Exception
     public static function handleUncaughtException($instance)
     {
         @ob_end_clean();
-        if (!($instance instanceof error)) {
+        if (!($instance instanceof Error)) {
             $instance = new self($instance->getMessage(), intval($instance->getCode()), $instance, $instance->getTrace());
         }
+        //echo $instance->getMessage();
         view('status')->push('error', $instance)->render();
         exit();
     }
@@ -54,7 +55,10 @@ class error extends \Exception
             if (!isset($value['file'])) {
                 continue;
             }
-            echo '<li>'.$value['function'].' in '.$value['file'].' line '.$value['line'].'</li>';
+            if (!isset($value['function'])) {
+                continue;
+            }
+            echo '<li><strong>'.$value['function'].'</strong> in <strong>'.$value['file'].'</strong> line <strong>'.$value['line'].'</strong></li>';
         }
         echo '</ol>';
         // krsort($backtrace);
