@@ -86,36 +86,34 @@ class route
                 if (!in_array($this->method, $httpMethod)) {
                     return;
                 }
-            }else{
+            } else {
                 return;
             }
         }
         $this->handledFormat = explode('/', $format);
-        if (count($this->handledFormat) != $this->c)
-        {
+        if (count($this->handledFormat) != $this->c) {
             return;
         }
         $var = array();
         foreach ($this->handledFormat as $key => $value)
         {
-            if (substr($value, 0, 1) == ':')
-            {
+            if (substr($value, 0, 1) == ':') {
                 @intval($this->handledURI[$key]); // 尝试将参数转换成整数类型
                 array_push($var, $this->handledURI[$key]);
                 continue;
             }
-            if ($value != $this->handledURI[$key])
-            {
+            if ($value != $this->handledURI[$key]) {
                 return;
             }
         }
-        if (is_callable($function))
-        {
+        if (is_callable($function)) {
             call_user_func_array($function, $var);
-            return;
+            $this->notfound = false;
+        } else {
+            $this::loadController($var, $function);
         }
         $this->locker = true;
-        $this::loadController($var, $function);
+        return;
     }
 
     private function listControllers()

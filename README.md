@@ -27,7 +27,7 @@ LoneFirstFramework
  $this->reg('name/:id', 'name@getNameById', ['get', 'head']);
  // 当访问 yourdomain/name/:id 时将会调用 nameController 中的 getNameById(:id) 函数
 
- $this->reg('say/hi', function() {echo 'hi';});
+ $this->reg('say/:hi', function($hi) {echo $hi;});
  // 当访问 yourdomain/say/hi 时会显示 'hi'
  ```
 
