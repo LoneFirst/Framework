@@ -60,14 +60,16 @@ class view
         $source = $this->protectCode($source);
 
         // loop e.g. @for
-        $source = preg_replace('/@for\s(.*)/', '<?php for\\1 {?>', $source);
-        $source = preg_replace('/@endfor/', '<?php }?>', $source);
-
-        $source = preg_replace('/@foreach\s(.*)/', '<?php foreach\\1 {?>', $source);
+        $source = preg_replace('/@foreach\s(.*)/', '<?php foreach (\\1) {?>', $source);
         $source = preg_replace('/@endforeach/', '<?php }?>', $source);
+        $source = $this->protectCode($source);
 
-        $source = preg_replace('/@while\s(.*)/', '<?php while\\1 {?>', $source);
+        $source = preg_replace('/@while\s(.*)/', '<?php while (\\1) {?>', $source);
         $source = preg_replace('/@endwhile/', '<?php }?>', $source);
+        $source = $this->protectCode($source);
+
+        $source = preg_replace('/@for\s(.*)/', '<?php for (\\1) {?>', $source);
+        $source = preg_replace('/@endfor/', '<?php }?>', $source);
         $source = $this->protectCode($source);
 
         // varibles e.g. {{ $n }}
@@ -77,6 +79,9 @@ class view
         // replace...
 
         $source = $this->popCode($source);
+
+        $source = preg_replace('/^[ \t]*(.+)[ \t]*$/m', '\\1', $source);
+        $source = preg_replace('/\n\r/m', '', $source);
         $output = '<?php if(!defined(\'ROOT_PATH\'))exit();?>'.PHP_EOL;
         $output .= trim($source);
         $output = preg_replace('/\s*\?\>\s*\<\?php\s*/is', PHP_EOL, $output);

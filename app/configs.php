@@ -9,7 +9,7 @@ $this->config = [
     // database config
     'database' => [
         // database is based PDO
-        'type' => 'mysql', // just support mysql now
+        'type' => 'mysql', // change database type here
 
         'mysql' => [
             'host' => '127.0.0.1',
@@ -19,6 +19,9 @@ $this->config = [
             'password' => '',
         ],
 
+        'sqlite' => [
+            'dsn' => 'sqlite::memory:',
+        ],
 
     ],
 
@@ -38,6 +41,7 @@ $this->config = [
     ],
 
     'log' => [
+        0 => true,
         'path' => ROOT_PATH.'log/',
     ]
 

@@ -24,7 +24,7 @@ class route
         require ROOT_PATH.'app/routes.php'; // 引入路由表
         log::writeHttpLog($this->generateLog());
         if ($this->notfound) {
-            view('status')->push('title', 'Oops!')->push('error', '404')->render();
+            throw new error('404 Not Found');
             exit();
         }
     }
