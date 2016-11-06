@@ -10,7 +10,7 @@ class view
 
     public function __construct($viewName, $data = NULL)
     {
-        $this->viewPath = ROOT_PATH.'resources/views/'.$viewName.'.html';
+        $this->viewPath = ROOT_PATH.'resources/views/'.$viewName.'.tpl';
         $this->viewTempPath = ROOT_PATH.'cache/'.md5($viewName).'.php';
         if ($data != NULL) {
             $this->data = $data;
@@ -97,7 +97,7 @@ class view
     // 引入继承的模板文件所采用的回调函数
     private function extends($matches)
     {
-        $extendsPath = ROOT_PATH.'resources/views/'.$matches[1].'.html';
+        $extendsPath = ROOT_PATH.'resources/views/'.$matches[1].'.tpl';
         if(!file_exists($extendsPath)) {
             throw new error("不存在对应的模板文件".$extendsPath, 1);
         }
