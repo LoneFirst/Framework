@@ -122,7 +122,7 @@ class model
         $setting = self::getSetting();
 
         $sql = "SELECT {$handledColumn} FROM {$setting['table']} WHERE {$where};";
-        return $c->query($sql)->fetch();
+        return $c->query($sql)->fetchAll();
     }
 
     // execute original sql and return the PDOStatement
