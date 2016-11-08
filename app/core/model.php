@@ -13,7 +13,7 @@ class model
         if (array_key_exists('table', $setting['calledVars'])) {
             $table = $setting['calledVars']['table'];
         } else {
-            $table = substr_replace(get_called_class(), '', 0, 6);
+            $table = substr_replace(get_called_class(), '', 0, 7);
         }
         $setting['table'] = $table;
 

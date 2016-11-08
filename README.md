@@ -3,6 +3,18 @@ LoneFirstFramework
 
 > Author : Wang Jie <i@i8e.net>
 
+### 安装
+
+```bash
+#使用composer安装
+composer create-project lonefirst/framework project
+
+#从github安装
+git clone https://github.com/cnwangjie/LoneFirstFramework.git project
+cd project
+composer install
+```
+
 ### 目录结构
     ├─app
     │  ├─controllers (用来存放控制器文件)
@@ -23,13 +35,13 @@ LoneFirstFramework
 
 实例:
 
- ```php
- $this->reg('name/:id', 'name@getNameById', ['get', 'head']);
- // 当访问 yourdomain/name/:id 时将会调用 nameController 中的 getNameById(:id) 函数
+```php
+$this->reg('name/:id', 'name@getNameById', ['get', 'head']);
+// 当访问 yourdomain/name/:id 时将会调用 nameController 中的 getNameById(:id) 函数
 
- $this->reg('say/:hi', function($hi) {echo $hi;});
- // 当访问 yourdomain/say/hi 时会显示 'hi'
- ```
+$this->reg('say/:hi', function($hi) {echo $hi;});
+// 当访问 yourdomain/say/hi 时会显示 'hi'
+```
 
 ### 使用模型
  - 你可以将模型类放在 `app/models/` 目录中
@@ -42,6 +54,7 @@ LoneFirstFramework
  - 可以显示 `resources/views/` 中的视图
  - 第一个必选参数为视图的名称
  - 第二个可选参数为要传入的数据
+ - 返回一个视图类的实例
  - 之后如果要传入数据可以使用视图类的 `push()` 函数
  - 使用视图类的 `render()` 函数展示视图
 
@@ -54,7 +67,7 @@ LoneFirstFramework
  - 唯一一个参数为要重定向至的URL
 
 #### response()
- - 返回一个响应类
+ - 返回一个响应类的实例
 
 ### 非常简单的连接到数据库
-框架自带基于PDO的数据库类,可以在任何一个地方使用 `core\database::get()` 都可以返回一个PDO类型的对象
+框架自带基于PDO的数据库类,可以在任何一个地方使用 `core\database::get()` 都可以返回一个数据库类型的对象

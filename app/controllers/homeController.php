@@ -9,9 +9,4 @@ class homeController
     {
         view('status')->render();
     }
-
-    public function s($s, $l)
-    {
-        name::create(['name' => $s, 'last name' => $l]);
-    }
 }
