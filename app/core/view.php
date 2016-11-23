@@ -55,22 +55,22 @@ class view
             $source = $this->protectCode($source);
         }
         // if e.g. @if true
-        $source = preg_replace('/@if\s(.*)\r\n/', '<?php if (\\1) {?>'.PHP_EOL, $source);
-        $source = preg_replace('/@elseif\s(.*)\r\n/', '<?php }elseif (\\1) {?>'.PHP_EOL, $source);
+        $source = preg_replace('/@if\s(.*)/', '<?php if (\\1) {?>', $source);
+        $source = preg_replace('/@elseif\s(.*)/', '<?php }elseif (\\1) {?>', $source);
         $source = preg_replace('/@else/', '<?php }else{?>', $source);
         $source = preg_replace('/@endif/', '<?php }?>', $source);
         $source = $this->protectCode($source);
 
         // loop e.g. @for
-        $source = preg_replace('/@foreach\s(.*)\r\n/', '<?php foreach (\\1) {?>'.PHP_EOL, $source);
+        $source = preg_replace('/@foreach\s(.*)/', '<?php foreach (\\1) {?>', $source);
         $source = preg_replace('/@endforeach/', '<?php }?>', $source);
         $source = $this->protectCode($source);
 
-        $source = preg_replace('/@while\s(.*)\r\n/', '<?php while (\\1) {?>'.PHP_EOL, $source);
+        $source = preg_replace('/@while\s(.*)/', '<?php while (\\1) {?>', $source);
         $source = preg_replace('/@endwhile/', '<?php }?>', $source);
         $source = $this->protectCode($source);
 
-        $source = preg_replace('/@for\s(.*)\r\n/', '<?php for (\\1) {?>'.PHP_EOL, $source);
+        $source = preg_replace('/@for\s(.*)/', '<?php for (\\1) {?>', $source);
         $source = preg_replace('/@endfor/', '<?php }?>', $source);
         $source = $this->protectCode($source);
 
