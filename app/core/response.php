@@ -37,6 +37,16 @@ class response
         echo json_encode($data);
     }
 
+    public function sendfile(string $filepath)
+    {
+        header('Content-type: text');
+        if (@readfile($filepath)) {
+            exit();
+        } else {
+            throw new error('发送了空白的响应文件');
+        }
+    }
+
     public function getContentType($filepath, $default = 'application/octet-stream')
     {
         $types = array( '323'     => 'text/h323',

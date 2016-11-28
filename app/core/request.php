@@ -24,21 +24,46 @@ class request
         }
     }
 
-    public function upload($name, $savePath, array $restriction, callback $savename, callback $verify)
+    // 上传文件
+    // @param string $name the input name of the uploaded file
+    // @param string $savePath where the file will be move
+    // @param array $restriction the restriction rule
+    // @param callback $savename a function need return the file name
+    // @param callback $verify a function need return a boolern
+    // @return boolern
+    public static function upload($name, $savePath, array $restriction, callback $savename = null, callback $verify = null)
     {
         $file = $_FILES[$name];
         $typeResult = array_key_exists('type', $restriction)?in_array($file['type'], $restriction['type']):true;
-        $sizeResult = array_key_exists('type', $restriction)?($file['size'] <= $restriction['sizelimit']):true;
+        $sizeResult = array_key_exists('sizelimit', $restriction)?($file['size'] <= $restriction['sizelimit']):true;
         $fileCorrect = ($typeResult && $sizeResult);
         if(!$fileCorrect) {
             return $this;
         }
         if ($file['error'] > 0) {
             throw new error($file['error'], 1);
-        } elseif (call_user_func($verify, $file)) {
-            $name = call_user_func($savename, $file);
-            move_uploaded_file($file['tmp_name'], $savePath.$name);
+        } else {
+            if (is_null($savename)) {
+                $name = $file['name'];
+            } else {
+                $name = call_user_func($savename, $file);
+            }
+
+            if (is_null($verify)) {
+                $v = !file_exists($savePath.$name);
+            } else {
+                $v = call_user_func($verify, $file);
+            }
+
+            if ($v) {
+                return move_uploaded_file($file['tmp_name'], $savePath.$name);
+            }
         }
-        return $this;
+        return false;
+    }
+
+    public static function input()
+    {
+        return array_merge($_GET, $_POST);
     }
 }

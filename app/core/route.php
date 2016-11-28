@@ -32,11 +32,8 @@ class route
     // 处理uri将后缀形式的参数进行处理
     private function handleURI($uri)
     {
-        if(strpos($uri, '?')) {
-            $uri = substr($uri, 0, strpos($uri, '?'));
-        }elseif(strpos($uri, '#')) {
-            $uri = substr($uri, 0, strpos($uri, '?'));
-        }
+        $uri = substr($uri, 0, strpos($uri, '?'));
+        echo $uri;
         $uri = explode('/', $uri);
         return $uri;
     }
@@ -74,6 +71,7 @@ class route
         if ($this->locker) {
             return;
         }
+        // 判断当前请求方式是否正确
         if ($httpMethod != null) {
             if (is_string($httpMethod)) {
                 if ($this->method != strtoupper($httpMethod)) {
@@ -90,6 +88,8 @@ class route
                 return;
             }
         }
+
+        // 判断URL是否对应
         $this->handledFormat = explode('/', $format);
         if (count($this->handledFormat) != $this->c) {
             return;
@@ -106,16 +106,21 @@ class route
                 return;
             }
         }
+
+        // 执行匿名函数或者寻找对应的控制器方法
         if (is_callable($function)) {
             call_user_func_array($function, $var);
             $this->notfound = false;
         } else {
             $this::loadController($var, $function);
         }
+
+        // 锁死路由
         $this->locker = true;
         return;
     }
 
+    // 返回包含所有控制器的数组
     private function listControllers()
     {
         $fileList = scandir(ROOT_PATH.'app/controllers');
@@ -125,6 +130,7 @@ class route
         return $fileList;
     }
 
+    // 生成路由日志
     private function generateLog()
     {
         $log = '';
