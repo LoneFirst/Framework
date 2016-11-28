@@ -121,7 +121,7 @@ class model
 
         $setting = self::getSetting();
 
-        $sql = "SELECT {$handledColumn} FROM {$setting['table']} WHERE {$where};";
+        $sql = "SELECT {$handledColumn} FROM `{$setting['table']}` WHERE {$where};";
         $s = $c->query($sql);
         if ($s) {
             return $s->fetchAll();
