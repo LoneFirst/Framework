@@ -18,7 +18,7 @@ class response
         return $url;
     }
 
-    public function download(string $filepath, string $filename = NULL, $contentType = NULL)
+    public function download($filepath, $filename = NULL, $contentType = NULL)
     {
         if ($contentType == NULL) {
             $contentType = $this->getContentType($filepath);
@@ -37,7 +37,7 @@ class response
         echo json_encode($data);
     }
 
-    public function sendfile(string $filepath)
+    public function sendfile($filepath)
     {
         header('Content-type: text');
         if (@readfile($filepath)) {

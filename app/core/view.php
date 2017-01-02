@@ -51,7 +51,7 @@ class view
 
         // extends e.g. @extends home
         while(preg_match('/@extends/', $source)) {
-            $source = preg_replace_callback('/@extends\s(.*)\r\n/', array($this, 'extends'), $source);
+            $source = preg_replace_callback('/@extends\s(.*)\r\n/', array($this, 'extendsTemp'), $source);
             $source = $this->protectCode($source);
         }
         // if e.g. @if true
@@ -97,7 +97,7 @@ class view
     }
 
     // 引入继承的模板文件所采用的回调函数
-    private function extends($matches)
+    private function extendsTemp($matches)
     {
         $extendsPath = ROOT_PATH.'resources/views/'.$matches[1].'.tpl';
         if(!file_exists($extendsPath)) {

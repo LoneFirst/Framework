@@ -1,4 +1,5 @@
 <?php
+require __DIR__.'/../vendor/autoload.php';
 $config = new core\config;
 
 // 返回对应的设置内容
@@ -40,7 +41,7 @@ function view($viewName,array $data = NULL)
 
 
 // 重定向
-function redirect(string $url) {
+function redirect($url) {
     header('Location: '.$url);
     exit();
 }

@@ -66,7 +66,7 @@ class route
     }
 
     // 吃枣要重构,先放着
-    public function reg(string $format, $function, $httpMethod = null)
+    public function reg($format, $function, $httpMethod = null)
     {
         if ($this->locker) {
             return;
