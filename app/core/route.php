@@ -32,10 +32,14 @@ class route
     // 处理uri将后缀形式的参数进行处理
     private function handleURI($uri)
     {
-        $uri = substr($uri, 0, strpos($uri, '?'));
-        echo $uri;
-        $uri = explode('/', $uri);
-        return $uri;
+        if (false !== strpos($uri, '?')) {
+            $uri = substr($uri, 0, strpos($uri, '?'));
+        }
+        if (false !== strpos($uri, '#')) {
+            $uri = substr($uri, 0, strpos($uri, '#'));
+        }
+        $handledURI = array_filter(explode('/', $uri));
+        return $handledURI;
     }
 
     // 内部加载控制器所使用的函数
@@ -90,12 +94,12 @@ class route
         }
 
         // 判断URL是否对应
-        $this->handledFormat = explode('/', $format);
-        if (count($this->handledFormat) != $this->c) {
+        $handledFormat = array_filter(explode('/', $format));
+        if (count($handledFormat) != $this->c) {
             return;
         }
         $var = array();
-        foreach ($this->handledFormat as $key => $value)
+        foreach ($handledFormat as $key => $value)
         {
             if (substr($value, 0, 1) == ':') {
                 @intval($this->handledURI[$key]); // 尝试将参数转换成整数类型
